@@ -52,8 +52,8 @@
               :style="{
                 background: `linear-gradient(
               90deg,
-              rgba(255, 31, 0, 1) ${ratingGradPercent[n - 1]}%,
-              rgba(16, 16, 16, 1) ${ratingGradPercent[n - 1]}%
+              rgba(255, 31, 0, 1) ${ratingGradPercentArray[n - 1]}%,
+              rgba(16, 16, 16, 1) ${ratingGradPercentArray[n - 1]}%
             )`,
               }"
               v-for="n in 5"
@@ -173,6 +173,35 @@
             </div>
           </div>
         </div>
+        <div class="detailed-online-statistics">
+          <div class="title">Детальная статистика онлайна администратора</div>
+          <div class="main">
+            <div class="scale">
+              <div class="item">12 ч</div>
+              <div class="item">11 ч</div>
+              <div class="item">10 ч</div>
+              <div class="item">9 ч</div>
+              <div class="item">8 ч</div>
+              <div class="item">7 ч</div>
+              <div class="item">6 ч</div>
+              <div class="item">5 ч</div>
+              <div class="item">4 ч</div>
+              <div class="item">3 ч</div>
+              <div class="item">2 ч</div>
+              <div class="item">1 ч</div>
+            </div>
+            <div class="bar-chart">
+              <div
+                class="item"
+                :style="{ height: secondToPercentArray[index] + '%' }"
+                v-for="(item, index) in FETCHDATA.adminData.week"
+                :key="index"
+              >
+                <div class="day-name">{{ item.dayName }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -193,6 +222,36 @@ export default {
           online: [8, 54, 454],
           answer: [1356, 10778, 32588],
           timing: [30, 42, 34],
+          week: [
+            {
+              dayName: "пн",
+              value: 21600,
+            },
+            {
+              dayName: "вт",
+              value: 7200,
+            },
+            {
+              dayName: "ср",
+              value: 10800,
+            },
+            {
+              dayName: "чт",
+              value: 25200,
+            },
+            {
+              dayName: "пт",
+              value: 18000,
+            },
+            {
+              dayName: "сб",
+              value: 32400,
+            },
+            {
+              dayName: "вс",
+              value: 28800,
+            },
+          ],
         },
       },
       currentOnlineSort: 0,
@@ -224,7 +283,7 @@ export default {
     };
   },
   computed: {
-    ratingGradPercent() {
+    ratingGradPercentArray() {
       const rating = this.FETCHDATA.adminData.rating;
       let arr = [0, 0, 0, 0, 0];
       for (let i = 1; i <= rating; i++) {
@@ -236,6 +295,11 @@ export default {
         arr[i] = (rating - i) * 100;
       }
       return arr;
+    },
+    secondToPercentArray() {
+      return this.FETCHDATA.adminData.week.map((el) => {
+        return Math.ceil((el.value * 100) / 43200);
+      });
     },
   },
 };
@@ -437,6 +501,7 @@ body {
         display: flex;
         justify-content: space-between;
         width: inherit;
+        margin-bottom: 1.40625vw;
 
         .stats {
           .title {
@@ -481,7 +546,6 @@ body {
               font-weight: bold;
               font-size: 3.55rem;
               text-align: center;
-              line-height: 1;
               text-shadow: 0px 0px 0.22rem rgba(255, 255, 255, 0.25);
             }
 
@@ -506,6 +570,55 @@ body {
                     left: 0;
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+
+      .detailed-online-statistics {
+        .title {
+          margin-bottom: 0.520833vw;
+        }
+
+        .main {
+          box-sizing: border-box;
+          padding: 0.8854166vw 0.8854166vw 2.0833333333vw 0.8854166vw;
+          display: flex;
+          background: linear-gradient(
+            180deg,
+            rgba(18, 18, 25, 0.85) 0%,
+            rgba(18, 18, 26, 0.85) 100%
+          );
+          border-radius: 0.20833vw;
+
+          .scale {
+            .item {
+              color: rgba(255, 255, 255, 0.16);
+              margin-bottom: 0.6770833333vw;
+            }
+          }
+
+          .bar-chart {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-grow: 1;
+            margin: 0 2.0833333333vw;
+
+            .item {
+              width: 3.3854166667vw;
+              background: linear-gradient(180deg, #c41e37 0%, #ff0027 100%);
+              box-shadow: 0px 0px 0.6770833333vw -0.15625vw #ff1f00;
+              border-radius: 0.20833vw;
+              position: relative;
+
+              .day-name {
+                color: rgba(255, 255, 255, 0.16);
+                position: absolute;
+                bottom: -1.3541666667vw;
+                left: 50%;
+                transform: translateX(-50%);
               }
             }
           }
