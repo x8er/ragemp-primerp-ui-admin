@@ -64,6 +64,117 @@
       </div>
       <div class="hidden-title">Prime Role Play Admin Board</div>
     </nav>
+    <main>
+      <div class="statistics">
+        <div class="lil-stats">
+          <div class="stats">
+            <div class="title">Статистика онлайна администратора</div>
+            <div class="main">
+              <div class="name">
+                <div class="dot"></div>
+                <span>Часов</span>
+              </div>
+              <div class="value">
+                {{ FETCHDATA.adminData.online[currentOnlineSort] }}
+              </div>
+              <div class="sort">
+                <div
+                  class="item"
+                  :class="{ active: currentOnlineSort === 0 }"
+                  @click="currentOnlineSort = 0"
+                >
+                  За день
+                </div>
+                <div
+                  class="item"
+                  :class="{ active: currentOnlineSort === 1 }"
+                  @click="currentOnlineSort = 1"
+                >
+                  За неделю
+                </div>
+                <div
+                  class="item"
+                  :class="{ active: currentOnlineSort === 2 }"
+                  @click="currentOnlineSort = 2"
+                >
+                  За месяц
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="title">Статистика ответов администратора</div>
+            <div class="main">
+              <div class="name">
+                <div class="dot"></div>
+                <span>Репортов</span>
+              </div>
+              <div class="value">
+                {{ FETCHDATA.adminData.answer[currentAnswerSort] }}
+              </div>
+              <div class="sort">
+                <div
+                  class="item"
+                  :class="{ active: currentAnswerSort === 0 }"
+                  @click="currentAnswerSort = 0"
+                >
+                  За день
+                </div>
+                <div
+                  class="item"
+                  :class="{ active: currentAnswerSort === 1 }"
+                  @click="currentAnswerSort = 1"
+                >
+                  За неделю
+                </div>
+                <div
+                  class="item"
+                  :class="{ active: currentAnswerSort === 2 }"
+                  @click="currentAnswerSort = 2"
+                >
+                  За месяц
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="title">Статистика времени ответа</div>
+            <div class="main">
+              <div class="name">
+                <div class="dot"></div>
+                <span>В среднем</span>
+              </div>
+              <div class="value">
+                {{ FETCHDATA.adminData.timing[currentTimingSort] }} СЕК
+              </div>
+              <div class="sort">
+                <div
+                  class="item"
+                  :class="{ active: currentTimingSort === 0 }"
+                  @click="currentTimingSort = 0"
+                >
+                  За день
+                </div>
+                <div
+                  class="item"
+                  :class="{ active: currentTimingSort === 1 }"
+                  @click="currentTimingSort = 1"
+                >
+                  За неделю
+                </div>
+                <div
+                  class="item"
+                  :class="{ active: currentTimingSort === 2 }"
+                  @click="currentTimingSort = 2"
+                >
+                  За месяц
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -79,12 +190,18 @@ export default {
           lvl: 8,
           reprimands: 2,
           rating: 3.3,
+          online: [8, 54, 454],
+          answer: [1356, 10778, 32588],
+          timing: [30, 42, 34],
         },
       },
-      currentSwitchButton: "main",
+      currentOnlineSort: 0,
+      currentAnswerSort: 0,
+      currentTimingSort: 0,
+      currentSwitchButton: "statistics",
       switchButtons: [
         {
-          name: "main",
+          name: "statistics",
           value: "Главная страница",
         },
         {
@@ -128,12 +245,19 @@ export default {
 @font-face {
   font-family: Bebas Neue;
   src: url("~@/assets/Bebas Neue Bold.ttf");
-  font-weight: bold;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Bebas Neue;
+  src: url("~@/assets/Bebas Neue Book.ttf");
+  font-weight: 200;
 }
 
 @font-face {
   font-family: Bebas Neue;
   src: url("~@/assets/Bebas Neue Regular.ttf");
+  font-weight: 400;
 }
 
 html {
@@ -296,6 +420,97 @@ body {
       left: 50%;
       bottom: 0.625vw;
       transform: translate(-50%);
+    }
+  }
+
+  main {
+    box-sizing: border-box;
+    padding-top: 2.60416vw;
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+
+    .statistics {
+      width: 49.53125vw;
+
+      .lil-stats {
+        display: flex;
+        justify-content: space-between;
+        width: inherit;
+
+        .stats {
+          .title {
+            margin-bottom: 0.520833vw;
+          }
+
+          .main {
+            box-sizing: border-box;
+            padding: 0.8854166vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 14.9479166vw;
+            height: 7.96875vw;
+            background: linear-gradient(
+              180deg,
+              rgba(18, 18, 25, 0.85) 0%,
+              rgba(18, 18, 26, 0.85) 100%
+            );
+            border-radius: 0.20833vw;
+
+            .name {
+              display: flex;
+              align-items: center;
+
+              .dot {
+                width: 0.3125vw;
+                height: 0.3125vw;
+                background: #00ff85;
+                box-shadow: 0px 0px 0.3125vw rgba(0, 255, 133, 0.5);
+                border-radius: 50%;
+                margin-right: 0.729166vw;
+              }
+
+              span {
+                font-weight: lighter;
+                color: rgba(255, 255, 255, 0.25);
+              }
+            }
+
+            .value {
+              font-weight: bold;
+              font-size: 3.55rem;
+              text-align: center;
+              line-height: 1;
+              text-shadow: 0px 0px 0.22rem rgba(255, 255, 255, 0.25);
+            }
+
+            .sort {
+              display: flex;
+              justify-content: space-between;
+
+              .item {
+                color: rgba(255, 255, 255, 0.15);
+
+                &.active {
+                  color: #fff;
+                  position: relative;
+
+                  &::after {
+                    content: "";
+                    width: 100%;
+                    height: 0.11rem;
+                    background-color: #d9203c;
+                    position: absolute;
+                    top: 120%;
+                    left: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
