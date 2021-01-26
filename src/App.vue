@@ -64,8 +64,8 @@
       </div>
       <div class="hidden-title">Prime Role Play Admin Board</div>
     </nav>
-    <main>
-      <div class="statistics">
+    <main :class="{ dark: currentSwitchButton !== 'statistics' }">
+      <div class="statistics" v-if="currentSwitchButton === 'statistics'">
         <div class="lil-stats">
           <div class="stats">
             <div class="title">Статистика онлайна администратора</div>
@@ -225,7 +225,47 @@
           </div>
         </div>
       </div>
+      <div class="help" v-if="currentSwitchButton === 'help'">
+        <div class="title">Команды для взаимодействия с сервером</div>
+        <div class="list">
+          <div
+            class="item"
+            v-for="(item, index) in FETCHDATA.adminData.commands"
+            :key="index"
+            @click="modal = item"
+          >
+            {{ item.title }}
+          </div>
+        </div>
+      </div>
     </main>
+    <div class="blackout" v-if="modal">
+      <div class="modal">
+        <div class="title">{{ modal.title }}</div>
+        <div
+          class="custom-input"
+          v-if="modal.type === 'l' || modal.type === 'm' || modal.type === 's'"
+        >
+          <div class="input-title">Укажите ID или ник</div>
+          <input type="text" />
+        </div>
+        <div
+          class="custom-input"
+          v-if="modal.type === 'l' || modal.type === 'm'"
+        >
+          <div class="input-title">Укажите причину</div>
+          <input type="text" />
+        </div>
+        <div class="custom-input" v-if="modal.type === 'l'">
+          <div class="input-title">Укажите длительность</div>
+          <input type="text" />
+        </div>
+        <div class="buttons">
+          <div class="item">Выполнить</div>
+          <div class="item" @click="modal = false">Отменить</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -275,6 +315,18 @@ export default {
               value: 28800,
             },
           ],
+          commands: [
+            {
+              command: "mute",
+              title: "Выдать мут игроку",
+              type: "l",
+            },
+            {
+              command: "kick",
+              title: "Кикнуть игрока",
+              type: "m",
+            },
+          ],
         },
         news: {
           firstName: "John",
@@ -283,9 +335,10 @@ export default {
           avaUrl: "/news-ava.png",
           timestamp: 1611529444189,
           message:
-            "Уважаемые коллеги, завтра будет собрание администраторов в дискорде, быть всем и каждому. Cобрание будет в канале ‘администраторы сервера’ в 18;30 по московскому времени.",
+            "Уважаемые коллеги, завтра будет собрание администраторов в дискорде, быть всем и каждому. Cобрание будет в канале ‘администраторы сервера’ в 18:30 по московскому времени.",
         },
       },
+      modal: false,
       currentOnlineSort: 0,
       currentAnswerSort: 0,
       currentTimingSort: 0,
@@ -377,6 +430,7 @@ body {
   display: flex;
   height: 100vh;
   width: 100vw;
+  position: relative;
 
   header {
     box-sizing: border-box;
@@ -532,7 +586,15 @@ body {
     justify-content: center;
     flex-grow: 1;
 
-    .statistics {
+    &.dark {
+      background: linear-gradient(
+        180deg,
+        rgba(18, 18, 25, 0.65) 0%,
+        rgba(18, 18, 26, 0.65) 100%
+      );
+    }
+
+    & > .statistics {
       width: 49.53125vw;
 
       .lil-stats {
@@ -741,6 +803,144 @@ body {
                 left: 0;
               }
             }
+          }
+        }
+      }
+    }
+
+    & > .help {
+      width: 50.3645833333vw;
+
+      & > .title {
+        margin-bottom: 0.520833vw;
+      }
+
+      .list {
+        box-sizing: border-box;
+        // padding-right: 0.6770833333vw;
+        max-height: 45.1041666667vw;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+          width: 0.15625vw;
+
+          &-thumb {
+            background: rgba(255, 255, 255, 0.48);
+          }
+
+          &-track {
+            background: rgba(255, 255, 255, 0.08);
+          }
+        }
+
+        .item {
+          display: inline-block;
+          border: 0.0520833333vw solid rgba(255, 255, 255, 0.14);
+          border-radius: 0.2083333333vw;
+          width: 14.375vw;
+          line-height: 2.8645833333vw;
+          text-align: center;
+          margin-bottom: 0.8333333333vw;
+          margin-right: 2.96875vw;
+
+          &:nth-child(3n + 3) {
+            margin-right: 0.6770833333vw;
+          }
+
+          &:hover {
+            color: rgba(21, 21, 21, 0.9);
+            background-color: #fff;
+            box-shadow: 0px 0px 0.3125vw rgba(255, 255, 255, 0.75);
+          }
+        }
+      }
+    }
+  }
+
+  .blackout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .modal {
+      box-sizing: border-box;
+      padding: 1.8229166667vw;
+      width: 22.8125vw;
+      background: linear-gradient(
+        226deg,
+        rgba(18, 18, 25, 0.95) 1.97%,
+        rgba(25, 25, 45, 0.95) 99.42%
+      );
+
+      .title {
+        font-weight: bold;
+        font-size: 1.6666666667rem;
+        margin-bottom: 3.4375vw;
+        position: relative;
+
+        &::after {
+          content: "";
+          background: linear-gradient(90.63deg, #ff1f00 0%, #6d0d00 99.57%);
+          border-radius: 0.1041666667vw;
+          width: 1.8229166667vw;
+          height: 0.2604166667vw;
+          position: absolute;
+          top: calc(100% + 0.4166666667vw);
+          left: 0;
+        }
+      }
+
+      .custom-input {
+        margin-bottom: 1.5104166667vw;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .input-title {
+          margin-bottom: 0.2083333333vw;
+        }
+
+        input {
+          box-sizing: border-box;
+          padding: 0.8333333333vw;
+          border: none;
+          border-radius: 0.2083333333vw;
+          background: rgba(0, 0, 0, 0.4);
+          font-family: Bebas Neue;
+          font-size: 1.0416666667vw;
+          color: #fff;
+          text-align: center;
+          outline: none;
+          width: 100%;
+
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.09);
+          }
+        }
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+
+        .item {
+          box-sizing: border-box;
+          width: 9.1145833333vw;
+          line-height: 1.9791666667vw;
+          text-align: center;
+          border: 0.0520833333vw solid #fff;
+          border-radius: 0.2083333333vw;
+
+          &:hover {
+            box-shadow: 0px 0px 6px rgba(255, 255, 255, 0.75);
+            background: #fff;
+            color: rgba(21, 21, 21, 0.9);
           }
         }
       }
