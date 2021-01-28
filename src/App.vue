@@ -301,7 +301,7 @@
                   class="btn"
                   :class="{ free: !item.closed && !item.checkingAdmin }"
                 >
-                  {{ !item.checkingAdmin && !item.closed ? "Открыто" : "" }}
+                  {{ !item.checkingAdmin && !item.closed ? "Забрать" : "" }}
                   {{ item.checkingAdmin && !item.closed ? "Недоступно" : "" }}
                   {{ item.checkingAdmin && item.closed ? "Закрыто" : "" }}
                 </div>
@@ -564,7 +564,6 @@ export default {
             closed: false,
             history: [],
           },
-
           {
             time: 1611772492677,
             firstName: "Stephan",
@@ -715,7 +714,9 @@ export default {
     },
     secondToPercentArray() {
       return this.FETCHDATA.adminData.week.map((el) => {
-        return Math.ceil((el.value * 100) / 43200);
+        let percent = Math.ceil((el.value * 100) / 43200);
+        if (percent > 100) return 100;
+        return percent;
       });
     },
     millisecondsToDateString() {
@@ -761,6 +762,8 @@ html {
 
 body {
   margin: 0;
+  background: url("https://images.hdqwalls.com/download/gta-v-ferrari-8k-4x-1920x1080.jpg")
+    no-repeat;
 }
 
 .admin-panel {
@@ -778,11 +781,7 @@ body {
     align-items: center;
     width: 6.71875vw;
     height: inherit;
-    background: linear-gradient(
-      180deg,
-      rgba(18, 18, 25, 0.85) 0%,
-      rgba(18, 18, 26, 0.85) 100%
-    );
+    background-color: rgba(18, 18, 26, 0.95);
 
     .ring {
       padding: 0.3125vw;
@@ -807,7 +806,7 @@ body {
       font-weight: bold;
       font-size: 4rem;
       white-space: nowrap;
-      opacity: 0.15;
+      opacity: 0.25;
     }
   }
 
@@ -820,11 +819,7 @@ body {
     align-items: center;
     width: 26.97916vw;
     height: inherit;
-    background: linear-gradient(
-      180deg,
-      rgba(18, 18, 25, 0.65) 0%,
-      rgba(18, 18, 26, 0.65) 100%
-    );
+    background-color: rgba(18, 18, 26, 0.85);
     position: relative;
 
     .wtf {
@@ -858,7 +853,7 @@ body {
         width: 14.375vw;
         height: 2.96875vw;
         font-size: 1.333rem;
-        color: rgba(255, 255, 255, 0.45);
+        color: rgba(255, 255, 255, 0.65);
         border-radius: 0.20833vw;
         position: relative;
 
@@ -944,11 +939,7 @@ body {
     flex-grow: 1;
 
     &.dark {
-      background: linear-gradient(
-        180deg,
-        rgba(18, 18, 25, 0.65) 0%,
-        rgba(18, 18, 26, 0.65) 100%
-      );
+      background-color: rgba(18, 18, 26, 0.75);
     }
 
     & > .statistics {
